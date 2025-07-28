@@ -1747,7 +1747,7 @@ end)
 
 local Rock = Main:AddFolder("Rock Farm")
 
-local selectrock = false
+local selectrock = ""
 
 local switch = rock:AddSwitch("Jungle Rock", function()
   if state then
