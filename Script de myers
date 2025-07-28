@@ -1706,7 +1706,7 @@ local function equipSamurai()
     end
 end
 
-local switch = Rebirth:AddSwitch("Farm dura (3h relog)", function(Value)
+local switch = Rebirth:AddSwitch("Farm dura (sube ping)", function(Value)
     local isGrinding = Value
 
     if not Value then
