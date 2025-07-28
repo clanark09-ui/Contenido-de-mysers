@@ -1747,10 +1747,12 @@ end)
 
 local Rock = Main:AddFolder("Rock Farm")
 
-local selectrock = ""
+local selectrock = false
 
-folder6:AddButton("Jungle Rock", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/CTXxALEJANDROxX/Roca-10m/refs/heads/main/Roca%2010m", true))()
+local switch = rock:AddSwitch("Jungle Rock", function()
+  if state then
+       loadstring(game:HttpGet("https://raw.githubusercontent.com/CTXxALEJANDROxX/Roca-10m/refs/heads/main/Roca%2010m", true))()
+   end
 end)
 
 local switch = Rock:AddSwitch("Auto Punch King Rock (5M)", function(state)
