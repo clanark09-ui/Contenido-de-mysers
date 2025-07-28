@@ -1673,7 +1673,7 @@ Rebirth:AddLabel("---Solo gente con 7-8 packs---")
 
 local switch = Rebirth:AddSwitch("Fast Rebirths", function(state)
     if state then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/0o0o0o0o0o0o0o0o0o0o0o0o/0o0o0o0o/refs/heads/main/Kk"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Fast-Rebith-/refs/heads/main/Fast"))()
     end
 end)
 
