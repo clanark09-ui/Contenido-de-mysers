@@ -1498,7 +1498,7 @@ folder2:AddSwitch("Hide Pets", function(State)
     end
 end)
 
-folder2:AddButton("Auto Comer Egg", function()
+folder2:AddSwitch("Auto Comer Egg", function(State)
     loadstring(game:HttpGet("https://raw.githubusercontent.com/CTXxALEJANDROxX/Protein-egg/refs/heads/main/Egg", true))()
 end)
 
