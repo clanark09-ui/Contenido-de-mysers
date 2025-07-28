@@ -2343,6 +2343,8 @@ Teleport:AddButton("Jungle Gym", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-8137, 28, 2820)
 end)
 
+local Calculadora = window:AddTab("Calculadora")
+
 local Credits = window:AddTab("Credits")
 
 Credits:AddLabel("Version 2")
