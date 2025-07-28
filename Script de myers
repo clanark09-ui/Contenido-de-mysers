@@ -1749,9 +1749,13 @@ local Rock = Main:AddFolder("Rock Farm")
 
 local selectrock = ""
 
-folder2:AddSwitch("Auto Punch Jungle Rock (10M)", function(State)
+Local switch = ("Auto Punch Jungle Rock (10M)", function(state)
     loadstring(game:HttpGet("https://raw.githubusercontent.com/CTXxALEJANDROxX/Roca-10m/refs/heads/main/Roca%2010m", true))()
-end)
+                    end
+                end
+            end
+        end
+   end)
 
 local switch = Rock:AddSwitch("Auto Punch King Rock (5M)", function(state)
     selectrock = "Muscle King Gym Rock"
