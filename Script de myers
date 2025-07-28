@@ -1767,15 +1767,15 @@ end)
 local switch = Rock:AddSwitch("Auto Punch King Rock (5M)", function(state)
     selectrock = "Muscle King Gym Rock"  -- Nombre de la roca seleccionada
     getgenv().autoFarm = state  -- Activar o desactivar el auto-punch
-    
-    -- Usamos una corutina para asegurar que el código se ejecute en segundo plano
+
+    -- Usamos spawn para ejecutar el código en un hilo separado
     spawn(function()
         while getgenv().autoFarm do
-            task.wait(0.5)  -- Pausa de medio segundo para evitar sobrecarga en el servidor
+            task.wait(0.5)  -- Espera medio segundo para evitar sobrecargar el servidor
 
-            -- Verificar que la durabilidad del jugador sea suficiente
+            -- Verificar si la durabilidad del jugador es suficiente
             if game:GetService("Players").LocalPlayer.Durability.Value >= 5000000 then
-                -- Recorrer todas las máquinas en el Workspace
+                -- Recorrer las máquinas en el workspace
                 for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
                     -- Verificar si la máquina tiene la durabilidad necesaria
                     if v.Name == "neededDurability" and v.Value == 5000000 then
