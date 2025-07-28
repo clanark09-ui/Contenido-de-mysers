@@ -2344,6 +2344,7 @@ Teleport:AddButton("Jungle Gym", function()
 end)
 
 local Calculadora = window:AddTab("Calculadora")
+Calculadora:AddLabel("Herramienta en proceso")
 
 local Credits = window:AddTab("Credits")
 
