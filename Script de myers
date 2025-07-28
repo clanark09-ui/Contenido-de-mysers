@@ -2138,7 +2138,7 @@ Killing:AddButton("Normal Punch", function()
         punch1 = character:FindFirstChild("Punch")
     end
 
-    local attackTime = 0.35 -- Default punch time
+    local attackTime = 0.1 -- Default punch time
 
     if punch and punch:FindFirstChild("attackTime") then
         punch.attackTime.Value = attackTime
