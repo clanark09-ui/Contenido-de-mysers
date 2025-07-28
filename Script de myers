@@ -2105,7 +2105,7 @@ Killing:AddSwitch("Auto Punch", function(state)
             autoPunchNoAnim = false -- Stop loop if tool is missing
         end
 
-        wait(0.001) -- Adjust delay if needed
+        wait(0.06666)) -- Adjust delay if needed
     end
 end)
 
