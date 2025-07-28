@@ -2342,6 +2342,7 @@ end)
 
 local Credits = window:AddTab("Credits")
 
-Credits:AddLabel("Paid Version, xxx Robux")
-Credits:AddLabel("Script Made By Myers")
-Credits:AddLabel("Discord: producertag7seix7.")
+Credits:AddLabel("Version 2")
+Credits:AddLabel("Script Hecho por username:")
+Credits:AddLabel("Demon_misteriousX and MrMyers1983")
+Credits:AddLabel("Discord: https://discord.gg/vm6hEdMzHg")
