@@ -1781,14 +1781,18 @@ local switch = Rock:AddSwitch("Auto Punch King Rock (5M)", function(state)
                     if v.Name == "neededDurability" and v.Value == 5000000 then
                         -- Verificar que el jugador tenga ambas manos
                         if game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                            -- Simular los toques de las manos sobre la roca
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                            
-                            -- Obtener la herramienta (si es necesario)
-                            gettool()
+                            -- Bucle para simular el golpe de manera continua
+                            while getgenv().autoFarm do
+                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
+                                
+                                -- Obtener la herramienta (si es necesario)
+                                gettool()
+
+                                task.wait(0.5)  -- Espera medio segundo antes de golpear de nuevo
+                            end
                         end
                     end
                 end
@@ -1796,6 +1800,7 @@ local switch = Rock:AddSwitch("Auto Punch King Rock (5M)", function(state)
         end
     end)
 end)
+
 
 local switch = Rock:AddSwitch("Auto Punch Legend Rock (1M)", function(state)
     selectrock = "Legend Gym Rock"
