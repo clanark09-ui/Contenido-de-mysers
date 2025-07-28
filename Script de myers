@@ -1631,43 +1631,6 @@ AutoEquip:AddSwitch("Auto Equip Handstands", function(State)
     end
 end)
 
-local AutoEquip = Main:AddFolder("Solo Packs")
-
-local switch = Rebirth:AddSwitch("Farm dura Op (Sube ping)", function(Value)
-    local isGrinding = Value
-
-    if not Value then
-        return
-    end
-
-    equipSamurai() -- Equipando o pet ao ativar o farm
-
-    local totalReps = 4546 -- reps necessárias pra 200B
-    local threads = 10 -- Dividimos em 10 blocos
-    local repsPerThread = math.floor(totalReps / threads)
-
-    while isGrinding do
-        local threadsFinished = 0
-
-        for i = 1, threads do
-            task.spawn(function()
-                for _ = 1, repsPerThread do
-                    c.muscleEvent:FireServer("rep")
-                end
-                threadsFinished = threadsFinished + 1
-            end)
-        end
-
-        -- Espera todas as threads terminarem antes de continuar
-        repeat
-            task.wait()
-        until threadsFinished >= threads
-
-        print("Tiro de 200B disparado!")
-        task.wait(10) -- Espera 10 segundos antes do próximo tiro
-    end
-end)
-
 local Rebirth = Main:AddFolder("Auto Rebirths")
 
 local autoRebirth = false
@@ -1743,7 +1706,7 @@ local function equipSamurai()
     end
 end
 
-local switch = Rebirth:AddSwitch("Farm dura Op (Sube ping)", function(Value)
+local switch = Rebirth:AddSwitch("Farm dura (3h relog)", function(Value)
     local isGrinding = Value
 
     if not Value then
@@ -1802,42 +1765,23 @@ local switch = Rock:AddSwitch("Auto Punch Jungle Rock (10M)", function(state)
 end)
 
 local switch = Rock:AddSwitch("Auto Punch King Rock (5M)", function(state)
-    selectrock = "Muscle King Gym Rock"  -- Nombre de la roca seleccionada
-    getgenv().autoFarm = state  -- Activar o desactivar el auto-punch
-
-    -- Usamos spawn para ejecutar el código en un hilo separado
-    spawn(function()
-        while getgenv().autoFarm do
-            task.wait(0.5)  -- Espera medio segundo para evitar sobrecargar el servidor
-
-            -- Verificar si la durabilidad del jugador es suficiente
-            if game:GetService("Players").LocalPlayer.Durability.Value >= 5000000 then
-                -- Recorrer las máquinas en el workspace
-                for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
-                    -- Verificar si la máquina tiene la durabilidad necesaria
-                    if v.Name == "neededDurability" and v.Value == 5000000 then
-                        -- Verificar que el jugador tenga ambas manos
-                        if game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-                            -- Bucle para simular el golpe de manera continua
-                            while getgenv().autoFarm do
-                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-                                firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-                                
-                                -- Obtener la herramienta (si es necesario)
-                                gettool()
-
-                                task.wait(0.5)  -- Espera medio segundo antes de golpear de nuevo
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end)
+    selectrock = "Muscle King Gym Rock"
+		getgenv().autoFarm = state
+		while getgenv().autoFarm do
+			task.wait()
+			if game:GetService("Players").LocalPlayer.Durability.Value >= 5000000 then
+				for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
+					if v.Name == "neededDurability" and v.Value == 5000000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
+						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
+						gettool()
+					end
+				end
+			end
+		end
 end)
-
 
 local switch = Rock:AddSwitch("Auto Punch Legend Rock (1M)", function(state)
     selectrock = "Legend Gym Rock"
@@ -2142,7 +2086,7 @@ Killing:AddSwitch("Auto Punch", function(state)
             autoPunchNoAnim = false -- Stop loop if tool is missing
         end
 
-        wait(0.000001) -- Adjust delay if needed
+        wait() -- Adjust delay if needed
     end
 end)
 
@@ -2156,7 +2100,7 @@ Killing:AddButton("Speed Punch", function()
         punch1 = character:FindFirstChild("Punch")
     end
 
-    local attackTime = 0.0001 -- Fast punch time
+    local attackTime = 0 -- Fast punch time
 
     if punch and punch:FindFirstChild("attackTime") then
         punch.attackTime.Value = attackTime
@@ -2175,7 +2119,7 @@ Killing:AddButton("Normal Punch", function()
         punch1 = character:FindFirstChild("Punch")
     end
 
-    local attackTime = 0.00001 -- Default punch time
+    local attackTime = 0.35 -- Default punch time
 
     if punch and punch:FindFirstChild("attackTime") then
         punch.attackTime.Value = attackTime
