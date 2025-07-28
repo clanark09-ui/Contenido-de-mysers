@@ -1481,8 +1481,9 @@ folder2:AddButton("Anti AFK", function()
 end)
 
 folder2:AddButton("Auto Comer Egg", function()
-    loadstring(game:HttpGet("", true))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/CTXxALEJANDROxX/Protein-egg/refs/heads/main/Egg", true))()
 end)
+
 -- Unable Trade Toggle
 folder2:AddSwitch("Disable Trade", function(State)
     if State then
