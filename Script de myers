@@ -1477,9 +1477,12 @@ folder2:AddButton("Permanent Shift Lock", function()
 end)
 
 folder2:AddButton("Anti AFK", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/evxncodes/mainroblox/main/anti-afk", true))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Anti-afk/refs/heads/main/Anti%20afk", true))()
 end)
 
+folder2:AddButton("Auto Comer Egg", function()
+    loadstring(game:HttpGet("", true))()
+end)
 -- Unable Trade Toggle
 folder2:AddSwitch("Disable Trade", function(State)
     if State then
