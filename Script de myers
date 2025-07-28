@@ -1765,22 +1765,36 @@ local switch = Rock:AddSwitch("Auto Punch Jungle Rock (10M)", function(state)
 end)
 
 local switch = Rock:AddSwitch("Auto Punch King Rock (5M)", function(state)
-    selectrock = "Muscle King Gym Rock"
-		getgenv().autoFarm = state
-		while getgenv().autoFarm do
-			task.wait()
-			if game:GetService("Players").LocalPlayer.Durability.Value >= 5000000 then
-				for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
-					if v.Name == "neededDurability" and v.Value == 5000000 and game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
-						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
-						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
-						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
-						firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
-						gettool()
-					end
-				end
-			end
-		end
+    selectrock = "Muscle King Gym Rock"  -- Nombre de la roca seleccionada
+    getgenv().autoFarm = state  -- Activar o desactivar el auto-punch
+    
+    -- Usamos una corutina para asegurar que el código se ejecute en segundo plano
+    spawn(function()
+        while getgenv().autoFarm do
+            task.wait(0.5)  -- Pausa de medio segundo para evitar sobrecarga en el servidor
+
+            -- Verificar que la durabilidad del jugador sea suficiente
+            if game:GetService("Players").LocalPlayer.Durability.Value >= 5000000 then
+                -- Recorrer todas las máquinas en el Workspace
+                for i, v in pairs(game:GetService("Workspace").machinesFolder:GetDescendants()) do
+                    -- Verificar si la máquina tiene la durabilidad necesaria
+                    if v.Name == "neededDurability" and v.Value == 5000000 then
+                        -- Verificar que el jugador tenga ambas manos
+                        if game.Players.LocalPlayer.Character:FindFirstChild("LeftHand") and game.Players.LocalPlayer.Character:FindFirstChild("RightHand") then
+                            -- Simular los toques de las manos sobre la roca
+                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 0)
+                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.RightHand, 1)
+                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 0)
+                            firetouchinterest(v.Parent.Rock, game:GetService("Players").LocalPlayer.Character.LeftHand, 1)
+                            
+                            -- Obtener la herramienta (si es necesario)
+                            gettool()
+                        end
+                    end
+                end
+            end
+        end
+    end)
 end)
 
 local switch = Rock:AddSwitch("Auto Punch Legend Rock (1M)", function(state)
