@@ -17,8 +17,8 @@ for _, id in ipairs(allowedUserIds) do
 end
 
 if not isAllowed then
-    warn("Acesso negado. Este script não pode ser executado por você.")
-    Player:Kick("Você não tem permissão para executar este script.")
+    warn("Acceso denegado, este Script es de compra.")
+    Player:Kick("No tienes permiso para executar este Script.")
     return
 end
 
