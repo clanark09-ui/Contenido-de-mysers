@@ -2325,19 +2325,19 @@ local Calculadora = window:AddTab("Calculadora")
 -- Añadir una nueva carpeta/panel en la pestaña "Calculadora"
 local calculadoraFolder = Calculadora:AddFolder("Dura Calculator")
 
--- Crear la interfaz para la calculadora de durabilidad
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+-- Crear la interfaz para la calculadora de durabilidad dentro del tab de Calculadora
+local gui = Instance.new("Frame", calculadoraFolder)  -- Esto asegura que se agrega dentro de la pestaña
 gui.Name = "PackDamageCalculator"
 
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 360, 0, 440)
-frame.Position = UDim2.new(0.5, -180, 0.5, -220)
-frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-frame.BorderSizePixel = 0
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
-makeDraggable(frame)
+gui.Size = UDim2.new(0, 360, 0, 440)
+gui.Position = UDim2.new(0.5, -180, 0.5, -220)
+gui.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+gui.BorderSizePixel = 0
+Instance.new("UICorner", gui).CornerRadius = UDim.new(0, 12)
+makeDraggable(gui)
 
-local titleBar = Instance.new("Frame", frame)
+-- Título de la calculadora
+local titleBar = Instance.new("Frame", gui)
 titleBar.Size = UDim2.new(1, 0, 0, 30)
 titleBar.BackgroundTransparency = 1
 
@@ -2350,17 +2350,8 @@ title.BackgroundTransparency = 1
 title.TextScaled = true
 title.Font = Enum.Font.GothamBold
 
-local btnMinimize = Instance.new("TextButton", titleBar)
-btnMinimize.Size = UDim2.new(0, 30, 1, 0)
-btnMinimize.Position = UDim2.new(1, -60, 0, 0)
-btnMinimize.Text = "–"
-btnMinimize.Font = Enum.Font.GothamBold
-btnMinimize.TextScaled = true
-btnMinimize.TextColor3 = Color3.new(1, 1, 1)
-btnMinimize.BackgroundTransparency = 1
-
 -- Crear el campo de entrada de la durabilidad base
-local input = Instance.new("TextBox", frame)
+local input = Instance.new("TextBox", gui)
 input.PlaceholderText = "Escribe Durabilidad base (ej: 1.27Qa)"
 input.Size = UDim2.new(0.9, 0, 0, 40)
 input.Position = UDim2.new(0.05, 0, 0, 40)
@@ -2370,7 +2361,8 @@ input.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 input.TextColor3 = Color3.new(1, 1, 1)
 Instance.new("UICorner", input).CornerRadius = UDim.new(0, 8)
 
-local button = Instance.new("TextButton", frame)
+-- Botón para realizar el cálculo
+local button = Instance.new("TextButton", gui)
 button.Text = "Calcular"
 button.Size = UDim2.new(0.6, 0, 0, 40)
 button.Position = UDim2.new(0.2, 0, 0, 90)
@@ -2380,7 +2372,8 @@ button.TextScaled = true
 button.Font = Enum.Font.GothamBold
 Instance.new("UICorner", button).CornerRadius = UDim.new(0, 8)
 
-local scroll = Instance.new("ScrollingFrame", frame)
+-- Área para mostrar los resultados
+local scroll = Instance.new("ScrollingFrame", gui)
 scroll.Size = UDim2.new(0.9, 0, 0, 260)
 scroll.Position = UDim2.new(0.05, 0, 0, 140)
 scroll.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -2472,20 +2465,6 @@ end
 -- Conectar el botón de cálculo
 button.MouseButton1Click:Connect(calcular)
 
--- Minimizar el panel
-btnMinimize.MouseButton1Click:Connect(function()
-    frame.Visible = false
-    iconBtn.Visible = true
-end)
-
-iconBtn.MouseButton1Click:Connect(function()
-    frame.Visible = true
-    iconBtn.Visible = false
-end)
-
-iconClose.MouseButton1Click:Connect(function()
-    gui:Destroy()
-end)
 
 local Credits = window:AddTab("Credits")
 
