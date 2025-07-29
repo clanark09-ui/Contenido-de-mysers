@@ -2323,8 +2323,7 @@ end)
 local Calculadora = window:AddTab("Calculadora")
 
 -- Añadir una nueva carpeta/panel en la pestaña "Calculadora"
-local calculadoraTab = window:AddTab("Calculadora", Color3.fromRGB(50, 50, 50)) -- Color de la pestaña "Calculadora"
-local calculadoraFolder = calculadoraTab:AddFolder("Dura Calculator")
+local calculadoraFolder = Calculadora:AddFolder("Dura Calculator")
 
 -- Crear la interfaz para la calculadora de durabilidad
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
