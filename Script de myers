@@ -2321,7 +2321,172 @@ Teleport:AddButton("Jungle Gym", function()
 end)
 
 local Calculadora = window:AddTab("Calculadora")
-Calculadora:AddLabel("Herramienta en proceso")
+
+-- Añadir una nueva carpeta/panel en la pestaña "Calculadora"
+local calculadoraTab = window:AddTab("Calculadora", Color3.fromRGB(50, 50, 50)) -- Color de la pestaña "Calculadora"
+local calculadoraFolder = calculadoraTab:AddFolder("Dura Calculator")
+
+-- Crear la interfaz para la calculadora de durabilidad
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "PackDamageCalculator"
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 360, 0, 440)
+frame.Position = UDim2.new(0.5, -180, 0.5, -220)
+frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+frame.BorderSizePixel = 0
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+makeDraggable(frame)
+
+local titleBar = Instance.new("Frame", frame)
+titleBar.Size = UDim2.new(1, 0, 0, 30)
+titleBar.BackgroundTransparency = 1
+
+local title = Instance.new("TextLabel", titleBar)
+title.Size = UDim2.new(1, -60, 1, 0)
+title.Position = UDim2.new(0, 10, 0, 0)
+title.Text = "Calculadora de Dura"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.BackgroundTransparency = 1
+title.TextScaled = true
+title.Font = Enum.Font.GothamBold
+
+local btnMinimize = Instance.new("TextButton", titleBar)
+btnMinimize.Size = UDim2.new(0, 30, 1, 0)
+btnMinimize.Position = UDim2.new(1, -60, 0, 0)
+btnMinimize.Text = "–"
+btnMinimize.Font = Enum.Font.GothamBold
+btnMinimize.TextScaled = true
+btnMinimize.TextColor3 = Color3.new(1, 1, 1)
+btnMinimize.BackgroundTransparency = 1
+
+-- Crear el campo de entrada de la durabilidad base
+local input = Instance.new("TextBox", frame)
+input.PlaceholderText = "Escribe Durabilidad base (ej: 1.27Qa)"
+input.Size = UDim2.new(0.9, 0, 0, 40)
+input.Position = UDim2.new(0.05, 0, 0, 40)
+input.TextScaled = true
+input.Font = Enum.Font.Gotham
+input.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+input.TextColor3 = Color3.new(1, 1, 1)
+Instance.new("UICorner", input).CornerRadius = UDim.new(0, 8)
+
+local button = Instance.new("TextButton", frame)
+button.Text = "Calcular"
+button.Size = UDim2.new(0.6, 0, 0, 40)
+button.Position = UDim2.new(0.2, 0, 0, 90)
+button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+button.TextColor3 = Color3.new(1, 1, 1)
+button.TextScaled = true
+button.Font = Enum.Font.GothamBold
+Instance.new("UICorner", button).CornerRadius = UDim.new(0, 8)
+
+local scroll = Instance.new("ScrollingFrame", frame)
+scroll.Size = UDim2.new(0.9, 0, 0, 260)
+scroll.Position = UDim2.new(0.05, 0, 0, 140)
+scroll.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+scroll.BorderSizePixel = 0
+scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scroll.ScrollBarThickness = 6
+Instance.new("UICorner", scroll).CornerRadius = UDim.new(0, 8)
+
+local layout = Instance.new("UIListLayout", scroll)
+layout.Padding = UDim.new(0, 6)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+-- Función para convertir la durabilidad a valor numérico
+local function converterDanoBase(text)
+    local unidades = { ["T"] = 1e12, ["Q"] = 1e15, ["B"] = 1e9 }
+    text = text:upper()
+    for u, m in pairs(unidades) do
+        if text:find(u) then
+            local num = tonumber(text:match("(%d+%.?%d*)"))
+            if num then return num * m end
+        end
+    end
+    return tonumber(text:match("(%d+%.?%d*)")) or 0
+end
+
+-- Lógica de cálculo de la durabilidad
+local function calcular()
+    -- Limpiar resultados anteriores
+    for _, c in ipairs(scroll:GetChildren()) do
+        if c:IsA("Frame") or c:IsA("TextLabel") then
+            c:Destroy()
+        end
+    end
+
+    local danoBase = converterDanoBase(input.Text)
+    if danoBase <= 0 then
+        local msg = Instance.new("TextLabel", scroll)
+        msg.Size = UDim2.new(1, 0, 0, 30)
+        msg.Text = "Insira um valor válido!"
+        msg.TextColor3 = Color3.new(1, 0.4, 0.4)
+        msg.BackgroundTransparency = 1
+        msg.TextScaled = true
+        msg.Font = Enum.Font.Gotham
+        return
+    end
+
+    local incremento = 0.335
+    local adicional = 1.5  -- Aquí se agrega el 50%
+    for pack = 1, 8 do
+        local mult = 1 + (pack * incremento)
+        local valor = danoBase * mult * adicional  -- Aplica el 50% extra
+
+        local disp
+        if valor >= 1e15 then
+            disp = string.format("%.3f Qa", valor / 1e15)
+        elseif valor >= 1e12 then
+            disp = string.format("%.2f T", valor / 1e12)
+        elseif valor >= 1e9 then
+            disp = string.format("%.2f B", valor / 1e9)
+        else
+            disp = tostring(math.floor(valor))
+        end
+
+        local linha = Instance.new("Frame", scroll)
+        linha.Size = UDim2.new(1, 0, 0, 30)
+        linha.LayoutOrder = pack
+        linha.BackgroundTransparency = 1
+
+        local col1 = Instance.new("TextLabel", linha)
+        col1.Size = UDim2.new(0.4, 0, 1, 0)
+        col1.Position = UDim2.new(0, 0, 0, 0)
+        col1.Text = ("%d pack(s):"):format(pack)
+        col1.TextColor3 = Color3.new(1, 1, 1)
+        col1.BackgroundTransparency = 1
+        col1.Font = Enum.Font.Gotham
+        col1.TextScaled = true
+
+        local col2 = Instance.new("TextLabel", linha)
+        col2.Size = UDim2.new(0.6, 0, 1, 0)
+        col2.Position = UDim2.new(0.4, 0, 0, 0)
+        col2.Text = disp
+        col2.TextColor3 = Color3.new(1, 1, 1)
+        col2.BackgroundTransparency = 1
+        col2.Font = Enum.Font.Gotham
+        col2.TextScaled = true
+    end
+end
+
+-- Conectar el botón de cálculo
+button.MouseButton1Click:Connect(calcular)
+
+-- Minimizar el panel
+btnMinimize.MouseButton1Click:Connect(function()
+    frame.Visible = false
+    iconBtn.Visible = true
+end)
+
+iconBtn.MouseButton1Click:Connect(function()
+    frame.Visible = true
+    iconBtn.Visible = false
+end)
+
+iconClose.MouseButton1Click:Connect(function()
+    gui:Destroy()
+end)
 
 local Credits = window:AddTab("Credits")
 
