@@ -1489,6 +1489,13 @@ end)
 folder2:AddButton("Comer todas las barras de energía", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Comer-barra-de-energ-a-/refs/heads/main/Barra%20de%20energ%C3%ADa", true))()
 end)
+
+folder2:AddButton("Comer todos los batidos de proteína", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Auto-batidos-de-prote-na-/refs/heads/main/Comer", true))()
+end)
+folder2:AddButton("Comer todas las barras de proteína", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Auto-barras-de-prote-na-/refs/heads/main/Barra%20de%20prote%C3%ADna%2C%20comer", true))()
+end)
 -- Unable Trade Toggle
 folder2:AddSwitch("Disable Trade", function(State)
     if State then
