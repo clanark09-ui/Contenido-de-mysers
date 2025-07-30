@@ -1479,6 +1479,13 @@ folder2:AddButton("Anti AFK", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Anti-afk/refs/heads/main/Anti%20afk", true))()
 end)
 
+folder2:AddButton("Comer todos los batidos de energía", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Batido-energ-tico/refs/heads/main/Auto%20comer%20energ%C3%ADa", true))()
+end)
+
+folder2:AddButton("Comer todas las barras de energía", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/clanark09-ui/Comer-barra-de-energ-a-/refs/heads/main/Barra%20de%20energ%C3%ADa", true))()
+end)
 -- Unable Trade Toggle
 folder2:AddSwitch("Disable Trade", function(State)
     if State then
