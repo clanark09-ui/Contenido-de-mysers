@@ -2336,11 +2336,10 @@ Teleport:AddButton("Jungle Gym", function()
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-8137, 28, 2820)
 end)
 
--- Calculadora integrada directamente como pestaña
 local Calculadora = window:AddTab("Calculadora", Color3.fromRGB(200, 100, 100))
 
-local resultadoLabels = {}
 local baseStrength = 0
+local resultadoLabels = {}
 
 Calculadora:AddLabel("Pack Damage Calculator")
 
@@ -2350,30 +2349,32 @@ Calculadora:AddTextBox("Base Strength (ej: 1.27Qa, T, B)", function(text)
     for u, m in pairs(unidades) do
         if text:find(u) then
             local num = tonumber(text:match("(%d+%.?%d*)"))
-            if num then baseStrength = num * m return end
+            if num then
+                baseStrength = num * m
+                return
+            end
         end
     end
     baseStrength = tonumber(text:match("(%d+%.?%d*)")) or 0
 end)
 
--- Crear los labels una vez, estáticos
+local mensajeLabel = Calculadora:AddLabel("") -- Label para mostrar errores
+
+-- Crear los 8 labels una vez, en orden fijo
 for i = 1, 8 do
-    resultadoLabels[i] = Calculadora:AddLabel("%d pack(s): -":format(i))
+    resultadoLabels[i] = Calculadora:AddLabel(string.format("%d pack(s): -", i))
 end
 
--- Label para errores o mensajes
-local mensajeLabel = Calculadora:AddLabel("")
-
 Calculadora:AddButton("Calcular", function()
-    mensajeLabel.Text = ""
-
     if baseStrength <= 0 then
         mensajeLabel.Text = "Ingresa un valor válido."
         for i = 1, 8 do
-            resultadoLabels[i].Text = ("%d pack(s): -"):format(i)
+            resultadoLabels[i].Text = string.format("%d pack(s): -", i)
         end
         return
     end
+
+    mensajeLabel.Text = ""
 
     local danoAjustado = baseStrength * 0.10
     local incremento = 0.335
@@ -2393,9 +2394,10 @@ Calculadora:AddButton("Calcular", function()
             disp = tostring(math.floor(valor))
         end
 
-        resultadoLabels[pack].Text = ("%d pack(s): %s"):format(pack, disp)
+        resultadoLabels[pack].Text = string.format("%d pack(s): %s", pack, disp)
     end
 end)
+
 local Credits = window:AddTab("Credits")
 
 Credits:AddLabel("Version 2")
