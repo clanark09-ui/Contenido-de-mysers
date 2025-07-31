@@ -1754,7 +1754,6 @@ local switch = Rock:AddSwitch("Auto Punch Jungle Rock (10M)", function(state)
     end
 end)
 
-
 local Stats = window:AddTab("Stats")
 
 local function abbreviateNumber(value)
@@ -1774,13 +1773,14 @@ local function abbreviateNumber(value)
 end
 
 local labels = {
-    TimeSpentLabel = Stats:AddLabel("Time spent in this server: 00:00"),
-    StrengthGainedLabel = Stats:AddLabel("Amount of strength gained in this server: 0"),
-    DurabilityGainedLabel = Stats:AddLabel("Amount of durability gained in this server: 0"),
-    AgilityGainedLabel = Stats:AddLabel("Amount of agility gained in this server: 0"),
-    KillsGainedLabel = Stats:AddLabel("Amount of kills gained in this server: 0"),
-    EvilKarmaGainedLabel = Stats:AddLabel("Amount of Evil Karma gained in this server: 0"),
-    GoodKarmaGainedLabel = Stats:AddLabel("Amount of Good Karma gained in this server: 0")
+    TimeSpentLabel = Stats:AddLabel("Tiempo en el servidor: 00:00"),
+    StrengthGainedLabel = Stats:AddLabel("Fuerza ganada: 0"),
+    DurabilityGainedLabel = Stats:AddLabel("Durabilidad ganada: 0"),
+    AgilityGainedLabel = Stats:AddLabel("Agilidad ganada: 0"),
+    KillsGainedLabel = Stats:AddLabel("Asesinatos ganados: 0"),
+    EvilKarmaGainedLabel = Stats:AddLabel("Karma maligno ganado: 0"),
+    GoodKarmaGainedLabel = Stats:AddLabel("Karma bueno ganado: 0"),
+    RebirthsGainedLabel = Stats:AddLabel("Rebirths ganados: 0") -- nuevo
 }
 
 local function createMyLabels()
@@ -1796,6 +1796,7 @@ local function createMyLabels()
     local killsStat = leaderstats:WaitForChild("Kills")
     local evilKarmaStat = player:WaitForChild("evilKarma")
     local goodKarmaStat = player:WaitForChild("goodKarma")
+    local rebirthsStat = leaderstats:FindFirstChild("Rebirths") -- puede que no exista
 
     local initialStrength = strengthStat.Value or 0
     local initialDurability = durabilityStat.Value or 0
@@ -1803,30 +1804,27 @@ local function createMyLabels()
     local initialKills = killsStat.Value or 0
     local initialEvilKarma = evilKarmaStat.Value or 0
     local initialGoodKarma = goodKarmaStat.Value or 0
+    local initialRebirths = rebirthsStat and rebirthsStat.Value or 0
 
     local startTime = tick()
 
     local function updateLabels()
-        local strengthGained = strengthStat.Value - initialStrength
-        local durabilityGained = durabilityStat.Value - initialDurability
-        local agilityGained = agilityStat.Value - initialAgility
-        local killsGained = killsStat.Value - initialKills
-        local evilKarmaGained = evilKarmaStat.Value - initialEvilKarma
-        local goodKarmaGained = goodKarmaStat.Value - initialGoodKarma
-
-        labels.StrengthGainedLabel.Text = "Amount of strength gained in this server: " .. abbreviateNumber(strengthGained)
-        labels.DurabilityGainedLabel.Text = "Amount of durability gained in this server: " .. abbreviateNumber(durabilityGained)
-        labels.AgilityGainedLabel.Text = "Amount of agility gained in this server: " .. abbreviateNumber(agilityGained)
-        labels.KillsGainedLabel.Text = "Amount of kills gained in this server: " .. abbreviateNumber(killsGained)
-        labels.EvilKarmaGainedLabel.Text = "Amount of Evil Karma gained in this server: " .. abbreviateNumber(evilKarmaGained)
-        labels.GoodKarmaGainedLabel.Text = "Amount of Good Karma gained in this server: " .. abbreviateNumber(goodKarmaGained)
+        labels.StrengthGainedLabel.Text = "Fuerza ganada: " .. abbreviateNumber(strengthStat.Value - initialStrength)
+        labels.DurabilityGainedLabel.Text = "Durabilidad ganada: " .. abbreviateNumber(durabilityStat.Value - initialDurability)
+        labels.AgilityGainedLabel.Text = "Agilidad ganada: " .. abbreviateNumber(agilityStat.Value - initialAgility)
+        labels.KillsGainedLabel.Text = "Asesinatos ganados: " .. abbreviateNumber(killsStat.Value - initialKills)
+        labels.EvilKarmaGainedLabel.Text = "Karma maligno ganado: " .. abbreviateNumber(evilKarmaStat.Value - initialEvilKarma)
+        labels.GoodKarmaGainedLabel.Text = "Karma bueno ganado: " .. abbreviateNumber(goodKarmaStat.Value - initialGoodKarma)
+        if rebirthsStat then
+            labels.RebirthsGainedLabel.Text = "Rebirths ganados: " .. abbreviateNumber(rebirthsStat.Value - initialRebirths)
+        end
     end
 
     local function updateTimeSpent()
         local timeSpent = tick() - startTime
         local minutes = math.floor(timeSpent / 60)
         local seconds = math.floor(timeSpent % 60)
-        labels.TimeSpentLabel.Text = string.format("Time spent in this server: %02d:%02d", minutes, seconds)
+        labels.TimeSpentLabel.Text = string.format("Tiempo en el servidor: %02d:%02d", minutes, seconds)
     end
 
     strengthStat.Changed:Connect(updateLabels)
@@ -1835,6 +1833,7 @@ local function createMyLabels()
     killsStat.Changed:Connect(updateLabels)
     evilKarmaStat.Changed:Connect(updateLabels)
     goodKarmaStat.Changed:Connect(updateLabels)
+    if rebirthsStat then rebirthsStat.Changed:Connect(updateLabels) end
 
     game:GetService("RunService").Heartbeat:Connect(updateTimeSpent)
 
@@ -1842,6 +1841,7 @@ local function createMyLabels()
 end
 
 createMyLabels()
+
 
 local Player = window:AddTab("Player")
 
