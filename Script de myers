@@ -37,7 +37,7 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/memej
 -- Janela principal
 local window = library:AddWindow("Pheonix Hub V2", {
     main_color = Color3.fromRGB(139, 0, 0), -- Vermelho escuro
-    min_size = Vector2.new(530, 550),
+    min_size = Vector2.new(570, 550),
     can_resize = false,
 })
 
@@ -2382,6 +2382,73 @@ Calculadora:AddButton("Calcular", function()
     for pack = 1, 8 do
         local mult = 1 + (pack * incremento)
         local valor = danoAjustado * mult
+
+        local disp
+        if valor >= 1e15 then
+            disp = string.format("%.3f Qa", valor / 1e15)
+        elseif valor >= 1e12 then
+            disp = string.format("%.2f T", valor / 1e12)
+        elseif valor >= 1e9 then
+            disp = string.format("%.2f B", valor / 1e9)
+        else
+            disp = tostring(math.floor(valor))
+        end
+
+        resultadoLabels[pack].Text = string.format("%d pack(s): %s", pack, disp)
+    end
+end)
+
+-- 📌 Pestaña Calculadora 2 integrada en el menú
+local Calculadora2 = window:AddTab("Calculadora 2", Color3.fromRGB(200, 100, 100))
+
+local baseDurabilidad = 0
+local resultadoLabels = {}
+local mensajeLabel = nil
+
+Calculadora2:AddLabel("Pack Durability Calculator")
+
+-- Campo de entrada para la durabilidad base
+Calculadora2:AddTextBox("Durabilidad base (ej: 1.27Qa, T, B)", function(text)
+    local unidades = { ["T"] = 1e12, ["Q"] = 1e15, ["B"] = 1e9 }
+    text = text:upper()
+    for u, m in pairs(unidades) do
+        if text:find(u) then
+            local num = tonumber(text:match("(%d+%.?%d*)"))
+            if num then
+                baseDurabilidad = num * m
+                return
+            end
+        end
+    end
+    baseDurabilidad = tonumber(text:match("(%d+%.?%d*)")) or 0
+end)
+
+-- Label para mensajes de error
+mensajeLabel = Calculadora2:AddLabel("")
+
+-- Crear una vez los labels para resultados (fijos en su lugar)
+for i = 1, 8 do
+    resultadoLabels[i] = Calculadora2:AddLabel(string.format("%d pack(s): -", i))
+end
+
+-- Botón para calcular
+Calculadora2:AddButton("Calcular", function()
+    if baseDurabilidad <= 0 then
+        mensajeLabel.Text = "Ingresa un valor válido."
+        for i = 1, 8 do
+            resultadoLabels[i].Text = string.format("%d pack(s): -", i)
+        end
+        return
+    end
+
+    mensajeLabel.Text = ""
+
+    local incremento = 0.335
+    local adicional = 1.5 -- Aumento del 50% como en tu script original
+
+    for pack = 1, 8 do
+        local mult = 1 + (pack * incremento)
+        local valor = baseDurabilidad * mult * adicional
 
         local disp
         if valor >= 1e15 then
