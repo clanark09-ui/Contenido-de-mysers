@@ -1939,9 +1939,8 @@ end)
 local Killing = window:AddTab("Killing")
 
 local autoPunchNoAnim = false
-local punchDelay = 0 -- Velocidad entre ráfagas (0 = lo más rápido posible)
 
-Killing:AddSwitch("Auto Punch (4 golpes)", function(state)
+Killing:AddSwitch("Auto Punch Ultra Rápido (4 golpes)", function(state)
     autoPunchNoAnim = state
 
     task.spawn(function()
@@ -1958,7 +1957,7 @@ Killing:AddSwitch("Auto Punch (4 golpes)", function(state)
                     punchTool.Parent = playerChar
                 end
 
-                -- Golpes (2 veces cada mano = 4 golpes por ciclo)
+                -- 4 golpes instantáneos (2 veces cada mano)
                 for i = 1, 2 do
                     player.muscleEvent:FireServer("punch", "rightHand")
                     player.muscleEvent:FireServer("punch", "leftHand")
@@ -1969,7 +1968,8 @@ Killing:AddSwitch("Auto Punch (4 golpes)", function(state)
                 break
             end
 
-            task.wait(punchDelay)
+            -- Sin delay: máximo spam posible
+            task.wait() -- pausa mínima para no congelar el cliente
         end
     end)
 end)
