@@ -1938,33 +1938,40 @@ end)
 
 local Killing = window:AddTab("Killing")
 
--- Auto Punch [No Animation] Toggle
 local autoPunchNoAnim = false
-Killing:AddSwitch("Auto Punch", function(state)
+local punchDelay = 0 -- Velocidad entre ráfagas (0 = lo más rápido posible)
+
+Killing:AddSwitch("Auto Punch (4 golpes)", function(state)
     autoPunchNoAnim = state
 
-    while autoPunchNoAnim do
-        local player = game.Players.LocalPlayer
-        local playerName = player.Name
-        local punchTool =
-            player.Backpack:FindFirstChild("Punch") or
-            game.Workspace:FindFirstChild(playerName):FindFirstChild("Punch")
+    task.spawn(function()
+        while autoPunchNoAnim do
+            local player = game.Players.LocalPlayer
+            if not player then break end
 
-        if punchTool then
-            if punchTool.Parent ~= game.Workspace:FindFirstChild(playerName) then
-                punchTool.Parent = game.Workspace:FindFirstChild(playerName) -- Equip the tool
+            local playerChar = player.Character or game.Workspace:FindFirstChild(player.Name)
+            local punchTool = player.Backpack:FindFirstChild("Punch") or (playerChar and playerChar:FindFirstChild("Punch"))
+
+            if punchTool and player:FindFirstChild("muscleEvent") then
+                -- Equipar si no está equipado
+                if punchTool.Parent ~= playerChar then
+                    punchTool.Parent = playerChar
+                end
+
+                -- Golpes (2 veces cada mano = 4 golpes por ciclo)
+                for i = 1, 2 do
+                    player.muscleEvent:FireServer("punch", "rightHand")
+                    player.muscleEvent:FireServer("punch", "leftHand")
+                end
+            else
+                warn("Punch tool no encontrado. Deteniendo Auto Punch.")
+                autoPunchNoAnim = false
+                break
             end
 
-            -- Fire the punch event for both hands
-            player.muscleEvent:FireServer("punch", "rightHand")
-            player.muscleEvent:FireServer("punch", "leftHand")
-        else
-            warn("Punch tool not found")
-            autoPunchNoAnim = false -- Stop loop if tool is missing
+            task.wait(punchDelay)
         end
-
-        wait() -- Adjust delay if needed
-    end
+    end)
 end)
 
 Killing:AddButton("Speed Punch", function()
